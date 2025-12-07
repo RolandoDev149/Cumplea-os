@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Feliz cumpleaños, mi amor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- FAVICON CON CORAZÓN -->
+  <link 
+    rel="icon" 
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' ry='20' fill='%23ff4b6e'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='60'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E"
+  />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #ff9a9e, #fad0c4, #fbc2eb);
+      color: #333;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Fondo con collage de fotos */
+    .background-collage {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .collage-photo {
+      position: absolute;
+      opacity: 0;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      filter: saturate(1.1);
+      transform: translate(-50%, 10%);
+      animation-name: floatFade;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes floatFade {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 20%) scale(1);
+      }
+      20% {
+        opacity: 0.8;
+      }
+      80% {
+        opacity: 0.85;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -20%) scale(1.05);
+      }
+    }
+
+    .card {
+      position: relative;
+      max-width: 480px;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 24px;
+      padding: 24px 22px 26px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+      text-align: center;
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .heart {
+      width: 80px;
+      height: 72px;
+      position: relative;
+      margin: 0 auto 12px;
+      transform: scale(1);
+      animation: pulse 1.4s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 64px;
+      background: #ff4b6e;
+      border-radius: 40px 40px 0 0;
+      top: 8px;
+    }
+
+    .heart::before {
+      left: 40px;
+      transform-origin: left bottom;
+      transform: rotate(-45deg);
+    }
+
+    .heart::after {
+      left: 0;
+      transform-origin: right bottom;
+      transform: rotate(45deg);
+    }
+
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      margin-bottom: 18px;
+    }
+
+    .message {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin: 0 auto 16px;
+      max-width: 420px;
+      text-align: left;
+    }
+
+    .message span.highlight {
+      font-weight: 700;
+    }
+
+    .signature {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      font-style: italic;
+      text-align: right;
+    }
+
+    .btn-reveal,
+    .btn-music {
+      margin: 14px auto 4px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.3s ease;
+      display: block;
+    }
+
+    .btn-reveal {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(255,65,108,0.3);
+    }
+
+    .btn-music {
+      background: #fff;
+      color: #ff416c;
+      border: 1px solid rgba(255,65,108,0.3);
+    }
+
+    .btn-reveal:hover,
+    .btn-music:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+    }
+
+    .btn-reveal:active,
+    .btn-music:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+    }
+
+    .hidden-message {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.7s ease, opacity 0.7s ease;
+      margin-top: 8px;
+    }
+
+    .hidden-message.show {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    .hidden-message p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      text-align: left;
+      margin-top: 2px;
+    }
+
+    .small-note {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    /* Mensaje final con fueguitos */
+    .final-message {
+      margin-top: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .final-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      60% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 14px;
+      top: -10px;
+      border-radius: 2px;
+      pointer-events: none;
+      opacity: 0;
+      animation: confettiFall 2.4s linear forwards;
+      z-index: 3;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate3d(0, -100vh, 0) rotateZ(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(0, 100vh, 0) rotateZ(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* AJUSTES PARA CELULAR / PANTALLAS PEQUEÑAS */
+    @media (max-width: 600px) {
+      body {
+        align-items: flex-start;
+        justify-content: center;
+        padding: 20px 12px;
+        overflow-y: auto;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 420px;
+        padding: 18px 16px 20px;
+        margin-top: 24px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.16);
+      }
+
+      .heart {
+        width: 64px;
+        height: 58px;
+        margin-bottom: 10px;
+      }
+
+      .heart::before,
+      .heart::after {
+        width: 32px;
+        height: 52px;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+        line-height: 1.3;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 14px;
+      }
+
+      .message {
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+
+      .hidden-message p {
+        font-size: 0.9rem;
+      }
+
+      .btn-reveal,
+      .btn-music {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 9px 12px;
+      }
+
+      .small-note {
+        font-size: 0.75rem;
+      }
+
+      .final-message {
+        font-size: 0.9rem;
+      }
+
+      .collage-photo {
+        opacity: 0.35;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.18);
+      }
+    }
+
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 1.25rem;
+      }
+      .message {
+        font-size: 0.86rem;
+      }
+      .subtitle {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fondo con collage de fotos -->
+  <div class="background-collage" id="background-collage"></div>
+
+  <!-- Tarjeta principal -->
+  <div class="card" id="card">
+    <div class="heart"></div>
+
+    <h1>Feliz cumpleaños, Amorcito mundillo ❤️</h1>
+    <p class="subtitle">Hoy celebramos Luissiana cumpleaños weeeeee.</p>
+
+    <p class="message">
+      Gracias por <span class="highlight">ser una persona tan especial y amorosa, me siento muy afortunado de ser tu novio, eres una gran persona y me siento muy orgulloso de ti y de todo lo que haces, eres una inspiracion y un modelo a seguir</span>.
+      Cada día a tu lado es un regalo, y hoy solo quiero recordarte
+      lo increíble que eres y lo afortunado que me siento de tenerte.
+    </p>
+
+    <p class="signature">
+      Con todo mi amor,<br />
+      <span>Rolando tonto :3 💌</span>
+    </p>
+
+    <!-- Botón para mostrar el deseo -->
+    <button class="btn-reveal" id="btn-reveal">
+      Haz clic para leer mi deseo para ti
+    </button>
+
+    <!-- Mensaje oculto -->
+    <div class="hidden-message" id="hidden-message">
+      <p>
+        Deseo que este nuevo año de vida esté lleno de momentos
+        que te hagan sonreír tanto como tú me haces sonreír a mí.  
+        Siempre voy a estar a tu lado, apoyándote, cuidándote y amándote.
+      </p>
+    </div>
+
+    <!-- Botón para reproducir la canción especial -->
+    <button class="btn-music" id="btn-music">
+      Reproducir nuestra canción 🎵
+    </button>
+
+    <!-- Audio: pon aquí tu canción -->
+<!-- Audio: canción lista -->
+<audio id="song" preload="auto">
+  <source src="https://files.catbox.moe/qisho1.mp3" type="audio/mpeg">
+</audio>
+
+    <!-- Mensaje final con fueguitos / confetti -->
+    <p class="final-message" id="final-message">
+      🎉🔥 Feliz cumpleaños, mi amor. Que siempre tengamos motivos para celebrar juntos. Te amo muchísimo 🔥🎉
+    </p>
+
+    <p class="small-note">Hecho solo para ti, en esta pequeña página secreta 🗝️</p>
+  </div>
+
+  <script>
+    // --------- COLLAGE DE FOTOS EN EL FONDO ---------
+    const photos = [
+      "https://lh3.googleusercontent.com/pw/AP1GczPCfuC31IS2xvExECXqojQ-qOlW9PEa0vTK-5nr5YH4MBFz56SM9mQkNcZQQrY8GQ33MQtg8aEcAjNT-LoXiZchqMJ896xcQxn3kymkvNOSpThTYNs=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczOrSdcYnuHdLufiJq0-lSsLSDubL-5jIuessZeWZicqwyeRDsHIZ-HL_4JSIzZmzrUH9oAsyJfeskWh3JeiZWiNeSaqzSkzJQYrbEwA13ULPFMR8dQ=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczNIRFshRmwqXnbVvK5GcnhGNs80sleSvFR7ntynYqqK10Yzu-Qw_cDyrZ6Ta-3CftsC602KW94JWqdHq-gVt-BXAiZ8Sl-3O9TopuQGHH4q2DSGSpE=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczOaMFJ23Adajt8KAvhQROLt_IUMWfeMog8gKOPWxJlhB-AMo39byCiiEMO3Bnv5YBZwylzul-BBX3aPx6junPVIuXyBqSWEz1wJo_TbItMeK7kK4YI=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczOH7uqQK26ARsjtSwVaidmKt6uWRtZ_t7icmwv-YKANCNWk-n4KBP_k1T3amG4W2eyjSgNFPECgp02Xq1jbHk-duiSYPzFx7VUgIouCTIna_f9ES5I=w2400"
+    ];
+
+    const collage = document.getElementById('background-collage');
+    const totalElements = 16;
+
+    for (let i = 0; i < totalElements; i++) {
+      const img = document.createElement('img');
+      img.className = 'collage-photo';
+      img.src = photos[i % photos.length];
+
+      const top = Math.random() * 100;
+      const left = Math.random() * 100;
+      const size = 80 + Math.random() * 80;
+      const duration = 14 + Math.random() * 8;
+      const delay = Math.random() * duration;
+
+      img.style.top = top + '%';
+      img.style.left = left + '%';
+      img.style.width = size + 'px';
+      img.style.animationDuration = duration + 's';
+      img.style.animationDelay = '-' + delay + 's';
+
+      collage.appendChild(img);
+    }
+
+    // --------- LÓGICA DEL MENSAJE SECRETO Y MENSAJE FINAL ---------
+    const btnReveal = document.getElementById('btn-reveal');
+    const hidden = document.getElementById('hidden-message');
+    const finalMessage = document.getElementById('final-message');
+
+    btnReveal.addEventListener('click', () => {
+      const isShown = hidden.classList.toggle('show');
+
+      btnReveal.textContent = isShown
+        ? 'Ocultar mi deseo (pero sigue siendo para ti 💖)'
+        : 'Haz clic para leer mi deseo para ti';
+
+      if (isShown) {
+        // Mostrar mensaje final + confetti
+        finalMessage.classList.add('show');
+        triggerConfetti();
+      } else {
+        finalMessage.classList.remove('show');
+      }
+    });
+
+    // --------- BOTÓN DE MÚSICA ---------
+    const btnMusic = document.getElementById('btn-music');
+    const song = document.getElementById('song');
+
+    btnMusic.addEventListener('click', async () => {
+      // Si aún no configuraste la canción, avisar:
+      if (!song.src && !song.querySelector('source')?.src) {
+        alert('Aún no has configurado la URL de nuestra canción 💿');
+        return;
+      }
+
+      try {
+        if (song.paused) {
+          await song.play();
+          btnMusic.textContent = 'Pausar nuestra canción ⏸️';
+        } else {
+          song.pause();
+          btnMusic.textContent = 'Reproducir nuestra canción 🎵';
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    // --------- FUNCIÓN DE CONFETTI ---------
+    function triggerConfetti() {
+      const confettiCount = 70;
+
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+
+        const left = Math.random() * 100; // 0–100 vw
+        const delay = Math.random() * 0.8; // escalonar un poco
+        const duration = 1.8 + Math.random() * 1.2;
+        const rotate = (Math.random() * 360) + 'deg';
+
+        const color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+
+        confetti.style.left = left + 'vw';
+        confetti.style.backgroundColor = color;
+        confetti.style.animationDuration = duration + 's';
+        confetti.style.transform = `rotate(${rotate})`;
+        confetti.style.animationDelay = delay + 's';
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+          confetti.remove();
+        }, (duration + delay) * 1000);
+      }
+    }
+  </script>
+</body>
+</html>
