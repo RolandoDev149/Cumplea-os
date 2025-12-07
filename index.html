@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Feliz cumpleaños, mi amor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #ff9a9e, #fad0c4, #fbc2eb);
+      color: #333;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Fondo con collage de fotos */
+    .background-collage {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none; /* que no bloquee clics */
+    }
+
+    .collage-photo {
+      position: absolute;
+      opacity: 0;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      filter: saturate(1.1);
+      transform: translate(-50%, 10%);
+      animation-name: floatFade;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes floatFade {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 20%) scale(1);
+      }
+      20% {
+        opacity: 0.8;
+      }
+      80% {
+        opacity: 0.85;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -20%) scale(1.05);
+      }
+    }
+
+    .card {
+      position: relative;
+      max-width: 480px;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 24px;
+      padding: 24px 22px 26px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+      text-align: center;
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+      z-index: 2; /* por encima del collage */
+    }
+
+    .heart {
+      width: 80px;
+      height: 72px;
+      position: relative;
+      margin: 0 auto 12px;
+      transform: scale(1);
+      animation: pulse 1.4s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 64px;
+      background: #ff4b6e;
+      border-radius: 40px 40px 0 0;
+      top: 8px;
+    }
+
+    .heart::before {
+      left: 40px;
+      transform-origin: left bottom;
+      transform: rotate(-45deg);
+    }
+
+    .heart::after {
+      left: 0;
+      transform-origin: right bottom;
+      transform: rotate(45deg);
+    }
+
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      margin-bottom: 18px;
+    }
+
+    .message {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin: 0 auto 16px;
+      max-width: 420px;
+      text-align: left;
+    }
+
+    .message span.highlight {
+      font-weight: 700;
+    }
+
+    .signature {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      font-style: italic;
+      text-align: right;
+    }
+
+    .btn-reveal {
+      margin: 18px auto 4px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(255,65,108,0.3);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.3s ease;
+    }
+
+    .btn-reveal:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(255,65,108,0.35);
+    }
+
+    .btn-reveal:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(255,65,108,0.25);
+    }
+
+    .hidden-message {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.7s ease, opacity 0.7s ease;
+      margin-top: 8px;
+    }
+
+    .hidden-message.show {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    .hidden-message p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      text-align: left;
+      margin-top: 2px;
+    }
+
+    .small-note {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+      .message {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fondo con collage de fotos -->
+  <div class="background-collage" id="background-collage"></div>
+
+  <!-- Tarjeta principal -->
+  <div class="card" id="card">
+    <div class="heart"></div>
+
+    <h1>Feliz cumpleaños, Amorcito mundillo ❤️</h1>
+    <p class="subtitle">Hoy celebramos Luissiana cumpleaños weeeeee.</p>
+
+     <p class="message">
+      Gracias por <span class="highlight">ser una persona tan especial y amorosa, me siento muy afortunado de ser tu novio, eres una gran persona y me siento muy orgulloso de ti y de todo lo que haces, eres una inspiracion y un modelo a seguir</span>.
+      Cada día a tu lado es un regalo, y hoy solo quiero recordarte
+      lo increíble que eres y lo afortunado que me siento de tenerte.
+    </p>
+
+
+    <p class="signature">
+      Con todo mi amor,<br />
+      <span>Rolando tonto :3 💌</span>
+    </p>
+
+    <button class="btn-reveal" id="btn-reveal">Haz clic para leer mi deseo para ti</button>
+
+    <div class="hidden-message" id="hidden-message">
+      <p>
+       Deseo que este nuevo año de vida esté lleno de momentos
+        que te hagan sonreír tanto como tú me haces sonreír a mí.  
+        Siempre voy a estar a tu lado, apoyándote, cuidándote y amándote.
+      </p>
+    </div>
+
+    <p class="small-note">Hecho solo para ti, en esta pequeña página secreta 🗝️</p>
+  </div>
+
+  <script>
+    // --------- COLLAGE DE FOTOS EN EL FONDO ---------
+    // Pon aquí las fotos de ella (pueden ser URLs de internet o de tu servidor)
+    const photos = [
+      "https://lh3.googleusercontent.com/pw/AP1GczPCfuC31IS2xvExECXqojQ-qOlW9PEa0vTK-5nr5YH4MBFz56SM9mQkNcZQQrY8GQ33MQtg8aEcAjNT-LoXiZchqMJ896xcQxn3kymkvNOSpThTYNs=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczOrSdcYnuHdLufiJq0-lSsLSDubL-5jIuessZeWZicqwyeRDsHIZ-HL_4JSIzZmzrUH9oAsyJfeskWh3JeiZWiNeSaqzSkzJQYrbEwA13ULPFMR8dQ=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczNIRFshRmwqXnbVvK5GcnhGNs80sleSvFR7ntynYqqK10Yzu-Qw_cDyrZ6Ta-3CftsC602KW94JWqdHq-gVt-BXAiZ8Sl-3O9TopuQGHH4q2DSGSpE=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczOaMFJ23Adajt8KAvhQROLt_IUMWfeMog8gKOPWxJlhB-AMo39byCiiEMO3Bnv5YBZwylzul-BBX3aPx6junPVIuXyBqSWEz1wJo_TbItMeK7kK4YI=w2400",
+      "https://lh3.googleusercontent.com/pw/AP1GczOH7uqQK26ARsjtSwVaidmKt6uWRtZ_t7icmwv-YKANCNWk-n4KBP_k1T3amG4W2eyjSgNFPECgp02Xq1jbHk-duiSYPzFx7VUgIouCTIna_f9ES5I=w2400"
+      // Puedes añadir más líneas si quieres
+    ];
+
+    const collage = document.getElementById('background-collage');
+    const totalElements = 16; // cuántas "fotos flotantes" quieres
+
+    for (let i = 0; i < totalElements; i++) {
+      const img = document.createElement('img');
+      img.className = 'collage-photo';
+      img.src = photos[i % photos.length];
+
+      // Posición aleatoria en la pantalla
+      const top = Math.random() * 100;   // 0–100 %
+      const left = Math.random() * 100;  // 0–100 %
+
+      // Tamaño aleatorio dentro de un rango
+      const size = 80 + Math.random() * 80; // 80–160 px
+
+      // Animación con duración y retraso aleatorios
+      const duration = 14 + Math.random() * 8; // 14–22 s
+      const delay = Math.random() * duration;  // desfasadas entre sí
+
+      img.style.top = top + '%';
+      img.style.left = left + '%';
+      img.style.width = size + 'px';
+      img.style.animationDuration = duration + 's';
+      img.style.animationDelay = '-' + delay + 's'; // así ya empiezan en distintos momentos
+
+      collage.appendChild(img);
+    }
+
+    // --------- LÓGICA DEL MENSAJE SECRETO DE LA TARJETA ---------
+    const btn = document.getElementById('btn-reveal');
+    const hidden = document.getElementById('hidden-message');
+
+    btn.addEventListener('click', () => {
+      const isShown = hidden.classList.toggle('show');
+      btn.textContent = isShown
+        ? 'Ocultar mi deseo (pero sigue siendo para ti 💖)'
+        : 'Haz clic amorcito para que leas mi deseo para ti';
+    });
+  </script>
+</body>
+</html>
